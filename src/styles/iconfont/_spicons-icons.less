@@ -1,0 +1,461 @@
+@spicons-font-path: "./fonts";
+@font-face {
+	font-family: "spicons";
+	src: url('@{spicons-font-path}/spicons.eot');
+	src: url('@{spicons-font-path}/spicons.eot?#iefix') format('eot'),
+    	url('@{spicons-font-path}/spicons.ttf') format('truetype'),
+		url('@{spicons-font-path}/spicons.woff') format('woff'),
+		url('@{spicons-font-path}/spicons.svg#spicons') format('svg');
+}
+
+.sp-icon {
+	font-family: "spicons";
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@icon-alert-circled: "\E001";
+@icon-alert-filled: "\E002";
+@icon-align-center: "\E003";
+@icon-align-justify: "\E004";
+@icon-align-left: "\E005";
+@icon-align-right: "\E006";
+@icon-arrow-down-circled: "\E007";
+@icon-arrow-down: "\E008";
+@icon-arrow-left-circled: "\E009";
+@icon-arrow-left: "\E00A";
+@icon-arrow-right-circled: "\E00B";
+@icon-arrow-right: "\E00C";
+@icon-arrow-up-circled: "\E00D";
+@icon-arrow-up: "\E00E";
+@icon-bell: "\E00F";
+@icon-book: "\E010";
+@icon-bookmark: "\E011";
+@icon-briefcase: "\E012";
+@icon-calendar: "\E013";
+@icon-camera: "\E014";
+@icon-checkmark-circled: "\E015";
+@icon-checkmark-filled: "\E016";
+@icon-checkmark: "\E017";
+@icon-chevron-down: "\E018";
+@icon-chevron-left: "\E019";
+@icon-chevron-right: "\E01A";
+@icon-chevron-up: "\E01B";
+@icon-clipboard: "\E01C";
+@icon-clock: "\E01D";
+@icon-close-circled: "\E01E";
+@icon-close-filled: "\E01F";
+@icon-close: "\E020";
+@icon-cloud-download: "\E021";
+@icon-cloud-upload: "\E022";
+@icon-comment: "\E023";
+@icon-currency: "\E024";
+@icon-document: "\E025";
+@icon-download: "\E026";
+@icon-email: "\E027";
+@icon-eye-off: "\E028";
+@icon-eye: "\E029";
+@icon-fast-backward: "\E02A";
+@icon-fast-forward: "\E02B";
+@icon-female: "\E02C";
+@icon-flash: "\E02D";
+@icon-folder: "\E02E";
+@icon-funnel: "\E02F";
+@icon-happy: "\E030";
+@icon-headphone: "\E031";
+@icon-heart: "\E032";
+@icon-help-circled: "\E033";
+@icon-help-filled: "\E034";
+@icon-home: "\E035";
+@icon-image: "\E036";
+@icon-inbox: "\E037";
+@icon-information-circled: "\E038";
+@icon-information-filled: "\E039";
+@icon-layers: "\E03A";
+@icon-link: "\E03B";
+@icon-loading: "\E03C";
+@icon-location: "\E03D";
+@icon-locked: "\E03E";
+@icon-male: "\E03F";
+@icon-map: "\E040";
+@icon-maximize-b: "\E041";
+@icon-maximize: "\E042";
+@icon-microphone: "\E043";
+@icon-minimize-b: "\E044";
+@icon-minimize: "\E045";
+@icon-minus-circled: "\E046";
+@icon-minus: "\E047";
+@icon-monitor: "\E048";
+@icon-moon: "\E049";
+@icon-more: "\E04A";
+@icon-navigation: "\E04B";
+@icon-neutral: "\E04C";
+@icon-pause: "\E04D";
+@icon-phone: "\E04E";
+@icon-play-circled: "\E04F";
+@icon-play: "\E050";
+@icon-plus-circled: "\E051";
+@icon-plus: "\E052";
+@icon-printer: "\E053";
+@icon-refresh: "\E054";
+@icon-sad: "\E055";
+@icon-save: "\E056";
+@icon-scan: "\E057";
+@icon-search: "\E058";
+@icon-settings: "\E059";
+@icon-share: "\E05A";
+@icon-skip-back: "\E05B";
+@icon-skip-forward: "\E05C";
+@icon-star-filled: "\E05D";
+@icon-star: "\E05E";
+@icon-stop-circled: "\E05F";
+@icon-stop: "\E060";
+@icon-sun: "\E061";
+@icon-swap-horiz: "\E062";
+@icon-tag: "\E063";
+@icon-thumbs-down: "\E064";
+@icon-thumbs-up: "\E065";
+@icon-trash: "\E066";
+@icon-upload: "\E067";
+@icon-user: "\E068";
+@icon-zoom-in: "\E069";
+@icon-zoom-out: "\E06A";
+
+
+.sp-icon-char(@icon-variable) {
+	content: @@icon-variable;
+}
+
+.sp-icon-base-pseudo(@filename, @insert: before) {
+	@pseudo-selector: ~":@{insert}";
+    @icon-variable: ~"icon-@{filename}";
+	&@{pseudo-selector} {
+		.sp-icon-char(@icon-variable);
+	}
+}
+
+.sp-icon-alert-circled {
+	.sp-icon-base-pseudo(alert-circled);
+}
+.sp-icon-alert-filled {
+	.sp-icon-base-pseudo(alert-filled);
+}
+.sp-icon-align-center {
+	.sp-icon-base-pseudo(align-center);
+}
+.sp-icon-align-justify {
+	.sp-icon-base-pseudo(align-justify);
+}
+.sp-icon-align-left {
+	.sp-icon-base-pseudo(align-left);
+}
+.sp-icon-align-right {
+	.sp-icon-base-pseudo(align-right);
+}
+.sp-icon-arrow-down-circled {
+	.sp-icon-base-pseudo(arrow-down-circled);
+}
+.sp-icon-arrow-down {
+	.sp-icon-base-pseudo(arrow-down);
+}
+.sp-icon-arrow-left-circled {
+	.sp-icon-base-pseudo(arrow-left-circled);
+}
+.sp-icon-arrow-left {
+	.sp-icon-base-pseudo(arrow-left);
+}
+.sp-icon-arrow-right-circled {
+	.sp-icon-base-pseudo(arrow-right-circled);
+}
+.sp-icon-arrow-right {
+	.sp-icon-base-pseudo(arrow-right);
+}
+.sp-icon-arrow-up-circled {
+	.sp-icon-base-pseudo(arrow-up-circled);
+}
+.sp-icon-arrow-up {
+	.sp-icon-base-pseudo(arrow-up);
+}
+.sp-icon-bell {
+	.sp-icon-base-pseudo(bell);
+}
+.sp-icon-book {
+	.sp-icon-base-pseudo(book);
+}
+.sp-icon-bookmark {
+	.sp-icon-base-pseudo(bookmark);
+}
+.sp-icon-briefcase {
+	.sp-icon-base-pseudo(briefcase);
+}
+.sp-icon-calendar {
+	.sp-icon-base-pseudo(calendar);
+}
+.sp-icon-camera {
+	.sp-icon-base-pseudo(camera);
+}
+.sp-icon-checkmark-circled {
+	.sp-icon-base-pseudo(checkmark-circled);
+}
+.sp-icon-checkmark-filled {
+	.sp-icon-base-pseudo(checkmark-filled);
+}
+.sp-icon-checkmark {
+	.sp-icon-base-pseudo(checkmark);
+}
+.sp-icon-chevron-down {
+	.sp-icon-base-pseudo(chevron-down);
+}
+.sp-icon-chevron-left {
+	.sp-icon-base-pseudo(chevron-left);
+}
+.sp-icon-chevron-right {
+	.sp-icon-base-pseudo(chevron-right);
+}
+.sp-icon-chevron-up {
+	.sp-icon-base-pseudo(chevron-up);
+}
+.sp-icon-clipboard {
+	.sp-icon-base-pseudo(clipboard);
+}
+.sp-icon-clock {
+	.sp-icon-base-pseudo(clock);
+}
+.sp-icon-close-circled {
+	.sp-icon-base-pseudo(close-circled);
+}
+.sp-icon-close-filled {
+	.sp-icon-base-pseudo(close-filled);
+}
+.sp-icon-close {
+	.sp-icon-base-pseudo(close);
+}
+.sp-icon-cloud-download {
+	.sp-icon-base-pseudo(cloud-download);
+}
+.sp-icon-cloud-upload {
+	.sp-icon-base-pseudo(cloud-upload);
+}
+.sp-icon-comment {
+	.sp-icon-base-pseudo(comment);
+}
+.sp-icon-currency {
+	.sp-icon-base-pseudo(currency);
+}
+.sp-icon-document {
+	.sp-icon-base-pseudo(document);
+}
+.sp-icon-download {
+	.sp-icon-base-pseudo(download);
+}
+.sp-icon-email {
+	.sp-icon-base-pseudo(email);
+}
+.sp-icon-eye-off {
+	.sp-icon-base-pseudo(eye-off);
+}
+.sp-icon-eye {
+	.sp-icon-base-pseudo(eye);
+}
+.sp-icon-fast-backward {
+	.sp-icon-base-pseudo(fast-backward);
+}
+.sp-icon-fast-forward {
+	.sp-icon-base-pseudo(fast-forward);
+}
+.sp-icon-female {
+	.sp-icon-base-pseudo(female);
+}
+.sp-icon-flash {
+	.sp-icon-base-pseudo(flash);
+}
+.sp-icon-folder {
+	.sp-icon-base-pseudo(folder);
+}
+.sp-icon-funnel {
+	.sp-icon-base-pseudo(funnel);
+}
+.sp-icon-happy {
+	.sp-icon-base-pseudo(happy);
+}
+.sp-icon-headphone {
+	.sp-icon-base-pseudo(headphone);
+}
+.sp-icon-heart {
+	.sp-icon-base-pseudo(heart);
+}
+.sp-icon-help-circled {
+	.sp-icon-base-pseudo(help-circled);
+}
+.sp-icon-help-filled {
+	.sp-icon-base-pseudo(help-filled);
+}
+.sp-icon-home {
+	.sp-icon-base-pseudo(home);
+}
+.sp-icon-image {
+	.sp-icon-base-pseudo(image);
+}
+.sp-icon-inbox {
+	.sp-icon-base-pseudo(inbox);
+}
+.sp-icon-information-circled {
+	.sp-icon-base-pseudo(information-circled);
+}
+.sp-icon-information-filled {
+	.sp-icon-base-pseudo(information-filled);
+}
+.sp-icon-layers {
+	.sp-icon-base-pseudo(layers);
+}
+.sp-icon-link {
+	.sp-icon-base-pseudo(link);
+}
+.sp-icon-loading {
+	.sp-icon-base-pseudo(loading);
+}
+.sp-icon-location {
+	.sp-icon-base-pseudo(location);
+}
+.sp-icon-locked {
+	.sp-icon-base-pseudo(locked);
+}
+.sp-icon-male {
+	.sp-icon-base-pseudo(male);
+}
+.sp-icon-map {
+	.sp-icon-base-pseudo(map);
+}
+.sp-icon-maximize-b {
+	.sp-icon-base-pseudo(maximize-b);
+}
+.sp-icon-maximize {
+	.sp-icon-base-pseudo(maximize);
+}
+.sp-icon-microphone {
+	.sp-icon-base-pseudo(microphone);
+}
+.sp-icon-minimize-b {
+	.sp-icon-base-pseudo(minimize-b);
+}
+.sp-icon-minimize {
+	.sp-icon-base-pseudo(minimize);
+}
+.sp-icon-minus-circled {
+	.sp-icon-base-pseudo(minus-circled);
+}
+.sp-icon-minus {
+	.sp-icon-base-pseudo(minus);
+}
+.sp-icon-monitor {
+	.sp-icon-base-pseudo(monitor);
+}
+.sp-icon-moon {
+	.sp-icon-base-pseudo(moon);
+}
+.sp-icon-more {
+	.sp-icon-base-pseudo(more);
+}
+.sp-icon-navigation {
+	.sp-icon-base-pseudo(navigation);
+}
+.sp-icon-neutral {
+	.sp-icon-base-pseudo(neutral);
+}
+.sp-icon-pause {
+	.sp-icon-base-pseudo(pause);
+}
+.sp-icon-phone {
+	.sp-icon-base-pseudo(phone);
+}
+.sp-icon-play-circled {
+	.sp-icon-base-pseudo(play-circled);
+}
+.sp-icon-play {
+	.sp-icon-base-pseudo(play);
+}
+.sp-icon-plus-circled {
+	.sp-icon-base-pseudo(plus-circled);
+}
+.sp-icon-plus {
+	.sp-icon-base-pseudo(plus);
+}
+.sp-icon-printer {
+	.sp-icon-base-pseudo(printer);
+}
+.sp-icon-refresh {
+	.sp-icon-base-pseudo(refresh);
+}
+.sp-icon-sad {
+	.sp-icon-base-pseudo(sad);
+}
+.sp-icon-save {
+	.sp-icon-base-pseudo(save);
+}
+.sp-icon-scan {
+	.sp-icon-base-pseudo(scan);
+}
+.sp-icon-search {
+	.sp-icon-base-pseudo(search);
+}
+.sp-icon-settings {
+	.sp-icon-base-pseudo(settings);
+}
+.sp-icon-share {
+	.sp-icon-base-pseudo(share);
+}
+.sp-icon-skip-back {
+	.sp-icon-base-pseudo(skip-back);
+}
+.sp-icon-skip-forward {
+	.sp-icon-base-pseudo(skip-forward);
+}
+.sp-icon-star-filled {
+	.sp-icon-base-pseudo(star-filled);
+}
+.sp-icon-star {
+	.sp-icon-base-pseudo(star);
+}
+.sp-icon-stop-circled {
+	.sp-icon-base-pseudo(stop-circled);
+}
+.sp-icon-stop {
+	.sp-icon-base-pseudo(stop);
+}
+.sp-icon-sun {
+	.sp-icon-base-pseudo(sun);
+}
+.sp-icon-swap-horiz {
+	.sp-icon-base-pseudo(swap-horiz);
+}
+.sp-icon-tag {
+	.sp-icon-base-pseudo(tag);
+}
+.sp-icon-thumbs-down {
+	.sp-icon-base-pseudo(thumbs-down);
+}
+.sp-icon-thumbs-up {
+	.sp-icon-base-pseudo(thumbs-up);
+}
+.sp-icon-trash {
+	.sp-icon-base-pseudo(trash);
+}
+.sp-icon-upload {
+	.sp-icon-base-pseudo(upload);
+}
+.sp-icon-user {
+	.sp-icon-base-pseudo(user);
+}
+.sp-icon-zoom-in {
+	.sp-icon-base-pseudo(zoom-in);
+}
+.sp-icon-zoom-out {
+	.sp-icon-base-pseudo(zoom-out);
+}
