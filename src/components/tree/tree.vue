@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <Tree-Node v-for="item in data" :key="item.title" :data="item" visible></Tree-Node>
-    </div>
+  <div>
+    <Tree-Node v-for="item in data" :key="item.title" :node-data="item" visible :root="rootData"></Tree-Node>
+  </div>
 </template>
 <script>
 import TreeNode from './node.vue';
@@ -14,11 +14,21 @@ export default {
         data: {
             type: Array,
             default: []
+        },
+        draggable:{
+            type:Boolean,
+            default:false
         }
     },
     data() {
         return {
             prefixCls: "sp-tree",
+            rootData:this,
+            dragOverStatus:{
+          overNodeKey: "",
+          dropPosition: "",
+          dragNode:{}
+        },
         };
     },
     computed: {
@@ -31,6 +41,7 @@ export default {
         }
     },
     methods: {
+    
     },
     mounted() {
     },

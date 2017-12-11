@@ -1,5 +1,5 @@
 <template>
-    <Tree :data="data1">
+    <Tree :data="data1" draggable>
     </Tree>
 </template>
 <script>
