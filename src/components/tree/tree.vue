@@ -25,9 +25,9 @@ export default {
             prefixCls: "sp-tree",
             rootData:this,
             dragOverStatus:{
-          overNodeKey: "",
-          dropPosition: "",
-          dragNode:{}
+            overNodeKey: "",
+            dropPosition: "",
+            dragNode:{}
         },
         };
     },

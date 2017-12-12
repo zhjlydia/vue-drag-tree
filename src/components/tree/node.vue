@@ -5,7 +5,7 @@
                 <div :class="[prefixCls + '-item']">
                     <i class="sp-icon sp-icon-arrow-right" :class="arrowClasses" @click.stop="expandNode()"></i>
                     <span :class="[prefixCls + '-title-wrap']" ref="dropTarget">
-                        <span :class="[dragClasses,dragOverClass]" ref="draggAbleDom" v-html="nodeData.title"></span>
+                        <span :class="[dragClasses,dragOverClass]" class="sp-tree-node-title" ref="draggAbleDom" v-html="nodeData.title"></span>
                     </span>
                 </div>
                 <transition-group name="list-complete">
@@ -16,6 +16,8 @@
     </transition>
 </template>
 <script>
+import { throttle, debounce } from '../../utils/throttle';
+let mouseOffsetY=0;//鼠标位置
 export default {
     name: 'TreeNode',
     components: {},
@@ -36,8 +38,8 @@ export default {
             type: Boolean,
             default: true
         },
-        root:{
-            type：Object
+        root: {
+            type:Object
         }
     },
     data() {
@@ -57,18 +59,18 @@ export default {
             return [
                 this.prefixCls + "-arrow",
                 {
-                    [this.prefixCls + "-arrow-open"]: this.data.isExpand,
-                    [this.prefixCls + "-arrow-hidden"]: !(this.data.children && this.data.children.length)
+                    [this.prefixCls + "-arrow-open"]: this.nodeData.isExpand,
+                    [this.prefixCls + "-arrow-hidden"]: !(this.nodeData.children && this.nodeData.children.length)
                 }
             ];
         },
         dragClasses() {
             return [
               {
-                ["tree-draggable"]:this.root.draggable && !this.nodeData.prop.noDrag,
+                ["tree-draggable"]:this.root.draggable && !this.nodeData.noDrag,
                 ["tree-drag-selected"]: this.dragNodeHighlight,
-                ["tree-drag-disabled"]: this.nodeData.prop.noDrag,//禁用该节点的拖拽
-                ["tree-drop-disabled"]: this.nodeData.prop.noDrop,//该节点禁用放置
+                ["tree-drag-disabled"]: this.nodeData.noDrag,//禁用该节点的拖拽
+                ["tree-drop-disabled"]: this.nodeData.noDrop,//该节点禁用放置
             }
        ];
     }
@@ -113,11 +115,11 @@ export default {
     //拖拽开始
     onDragStart(e) {
       e.stopPropagation();
-      if(this.nodeData.prop.noDrag){
+      if(this.nodeData.noDrag){
         return;
       }
       e.dataTransfer.effectAllowed = "move";
-      this.nodeData.prop.isExpand = false;
+      this.nodeData.isExpand = false;
       this.root.dragOverStatus.dragNode = {
         nodeData:this.nodeData,
         parentNode:this.parentNodeData
@@ -127,7 +129,7 @@ export default {
          e.dataTransfer.setData('text/plain', '');
       } catch (error) {
       }
-      this.root.rootInstance.$emit('dragStart', { treeNode: this.nodeData,parentNode:this.parentNodeData, event: e });
+      this.root.$emit('dragStart', { treeNode: this.nodeData,parentNode:this.parentNodeData, event: e });
     },
     //进入目标节点
     onDragEnter:debounce(function (e) {
@@ -146,7 +148,7 @@ export default {
       }
       
       //当前节点禁止做为放置节点时
-      if (this.nodeData.prop.noDrop) {
+      if (this.nodeData.noDrop) {
         return;
       }
       that.root.dragOverStatus.overNodeKey = that.nodeData._hash;//当前经过的可放置的节点的key
@@ -158,14 +160,12 @@ export default {
         clearTimeout(that.root.delayedDragEnterLogic[key]);
       });
       this.root.delayedDragEnterLogic[this.nodeData._hash] = setTimeout(function () {
-        console.timeEnd('small loop'); 
         
-        if (!that.nodeData.prop.isExpand) {
+        if (!that.nodeData.isExpand) {
           that.toggleCollapseStatus();
         }
       }, 500);
-       that.root.rootInstance.$emit('dragEnter', { treeNode: that.nodeData, parentNode: that.parentNodeData, event: e });
-       console.time('small loop');
+       that.root.$emit('dragEnter', { treeNode: that.nodeData, parentNode: that.parentNodeData, event: e });
     },150),
 
     onDragOver(e) {
@@ -181,8 +181,8 @@ export default {
         mouseOffsetY=e.pageY;
       }
       //当前节点禁止拖拽时
-      if(!this.nodeData.prop.noDrop){
-         this.root.rootInstance.$emit('dragOver', { treeNode: this.nodeData,parentNode:this.parentNodeData, event: e });
+      if(!this.nodeData.noDrop){
+         this.root.$emit('dragOver', { treeNode: this.nodeData,parentNode:this.parentNodeData, event: e });
       }
       return false;
     },
@@ -195,10 +195,10 @@ export default {
         return;
       }
       //当前节点禁止拖拽时
-      if(this.nodeData.prop.noDrop){
+      if(this.nodeData.noDrop){
         return;
       }
-      this.root.rootInstance.$emit('dragLeave', { treeNode: this.nodeData,parentNode:this.parentNodeData, event: e });
+      this.root.$emit('dragLeave', { treeNode: this.nodeData,parentNode:this.parentNodeData, event: e });
     },
 
     onDrop(e) {
@@ -211,7 +211,7 @@ export default {
       }
       this.root.dragOverStatus.overNodeKey = "";
       //当前节点禁止拖拽时
-      if(this.nodeData.prop.noDrop){
+      if(this.nodeData.noDrop){
         return;
       }
       //拖拽节点与目标节点是同一个，不做任何操作
@@ -231,7 +231,7 @@ export default {
         },
         dropPosition: this.root.dragOverStatus.dropPosition
       };
-      this.root.rootInstance.$emit('drop', res);
+      this.root.$emit('drop', res);
     },
 
     onDragEnd(e) {
@@ -242,13 +242,13 @@ export default {
         return;
       }
       //当前节点禁止拖拽时
-      if(this.nodeData.prop.noDrop){
+      if(this.nodeData.noDrop){
         return true;
       }
       this.root.dragOverStatus.dragNode=null;
       this.root.dragOverStatus.overNodeKey = "";
       this.dragNodeHighlight= false;
-      this.root.rootInstance.$emit('dragEnd', { treeNode: this.nodeData, parentNode:this.parentNodeData,event: e });
+      this.root.$emit('dragEnd', { treeNode: this.nodeData, parentNode:this.parentNodeData,event: e });
     },
 
 //获取元素到文档顶部和左边的距离
