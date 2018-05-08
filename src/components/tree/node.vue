@@ -1,21 +1,21 @@
 <template>
-    <transition name="slide-up">
-        <ul :class="classes">
-            <li>
-                <div :class="[prefixCls + '-item']">
-                    <i class="sp-icon sp-icon-arrow-right" :class="arrowClasses" @click.stop="toggleCollapseStatus()"></i>
-                    <span :class="[prefixCls + '-title-wrap']" ref="dropTarget">
-                        <span :class="[dragClasses,dragOverClass]" ref="draggAbleDom" v-html="nodeData.title"></span>
-                    </span>
-                </div>
-                  <Tree-Node v-for="item in nodeData.children" :key="item.title" :node-data="item"></Tree-Node>
-            </li>
-        </ul>
-    </transition>
+  <transition name="slide-up">
+    <ul :class="classes">
+      <li>
+        <div :class="[prefixCls + '-item']">
+          <i class="sp-icon sp-icon-arrow-right" :class="arrowClasses" @click.stop="toggleCollapseStatus()"></i>
+          <span :class="[prefixCls + '-title-wrap']" ref="dropTarget">
+            <span :class="[dragClasses,dragOverClass]" ref="draggAbleDom" v-html="nodeData.title"></span>
+          </span>
+        </div>
+        <Tree-Node v-for="item in nodeData.children" :key="item.title" :node-data="item" v-show="nodeData.children.length && nodeData.isExpand"></Tree-Node>
+      </li>
+    </ul>
+  </transition>
 </template>
 <script>
-import { throttle, debounce } from "../../utils/throttle";
-let mouseOffsetY=0;//鼠标位置
+import { throttle, debounce } from '../../utils/throttle';
+let mouseOffsetY = 0;//鼠标位置
 export default {
   name: "TreeNode",
   components: {},
@@ -25,7 +25,7 @@ export default {
       default() {
         return {
           title: "", //显示的标题
-          isExpand: false, //是否展开
+          isExpand: true, //是否展开
           noDrag: false, //此节点禁用拖拽
           noDrop: false, //此节点禁用放置
           children: [] //子项
@@ -38,7 +38,7 @@ export default {
       prefixCls: "sp-tree",
       dragOverClass: "",
       root: null,
-      parentNodeData:{},
+      parentNodeData: {},
       dragNodeHighlight: false //拖拽元素是否高亮
     };
   },
@@ -58,7 +58,7 @@ export default {
       ];
     },
     dragClasses() {
-      return [
+      return [this.prefixCls+"-node-title",
         {
           ["tree-draggable"]: this.root.draggable && !this.nodeData.noDrag,
           ["tree-drag-selected"]: this.dragNodeHighlight,
@@ -75,7 +75,7 @@ export default {
     } else {
       this.root = parent.root;
     }
-    this.parentNodeData=parent.nodeData;
+    this.parentNodeData = parent.nodeData;
     this.init();
   },
   mounted() {
@@ -94,29 +94,41 @@ export default {
   methods: {
     init() {
       this.nodeData._hash = this.generateHash();
+      this.setInitNodeValue();
     },
-//切换折叠状态
-      toggleCollapseStatus() {
-        var item = this.nodeData;
-        if (item.children && item.children.length === 0 && !this.nodeData.isExpand) {
-          //异步请求子节点数据
-          if (this.root.loadData && ("loading" in this.nodeData) && !this.nodeData.loading) {
-            this.$set(this.nodeData, 'loading', true);
-            this.root.loadData(item, children => {
-              this.$set(this.nodeData, 'loading', false);
-              if (children.length) {
-                this.$set(this.nodeData, 'children', children);
-                this.$nextTick(() => this.toggleCollapseStatus());
-              }
-            });
-            return;
-          }
+    setInitNodeValue() {
+      this.setPropValue("isExpand", this.nodeData, true);
+      this.setPropValue("noDrag", this.nodeData, false);
+      this.setPropValue("noDrop", this.nodeData, false);
+    },
+    //设置默认值
+    setPropValue(prop, Obj, initValue) {
+      if (!(prop in Obj)) {
+        this.$set(Obj, prop, initValue);
+      }
+    },
+    //切换折叠状态
+    toggleCollapseStatus() {
+      var item = this.nodeData;
+      if (item.children && item.children.length === 0 && !this.nodeData.isExpand) {
+        //异步请求子节点数据
+        if (this.root.loadData && ("loading" in this.nodeData) && !this.nodeData.loading) {
+          this.$set(this.nodeData, 'loading', true);
+          this.root.loadData(item, children => {
+            this.$set(this.nodeData, 'loading', false);
+            if (children.length) {
+              this.$set(this.nodeData, 'children', children);
+              this.$nextTick(() => this.toggleCollapseStatus());
+            }
+          });
+          return;
         }
-        //展开或收起节点
-        if ((item.children && item.children.length) || item.children && !item.children.length && this.nodeData.isExpand) {
-          this.nodeData.isExpand = !this.nodeData.isExpand;
-        }
-      },
+      }
+      //展开或收起节点
+      if ((item.children && item.children.length) || item.children && !item.children.length && this.nodeData.isExpand) {
+        this.nodeData.isExpand = !this.nodeData.isExpand;
+      }
+    },
 
     //拖拽处理-huijuan
     //计算拖拽节点的放置方式0（作为目标节点的子节点），-1（放置在目标节点的前面）,1（放置在目标节点的后面）
@@ -163,71 +175,64 @@ export default {
       this.dragNodeHighlight = true;
       try {
         e.dataTransfer.setData("text/plain", "");
-      } catch (error) {}
+      } catch (error) { }
       this.root.$emit("dragStart", {
         treeNode: this.nodeData,
         parentNode: this.parentNodeData,
         event: e
       });
     },
+    //是否有拖拽节点
+    hasDragNode() {
+      return this.root.dragOverStatus.dragNode && this.root.dragOverStatus.dragNode.nodeData._hash;
+    },
     //进入目标节点
-    onDragEnter: debounce(function(e) {
+    onDragEnter: debounce(function (e) {
       e.preventDefault();
       e.stopPropagation();
       var that = this;
       //当没有设置拖拽节点时，禁止作为目标节点
-      if (
-        !this.root.dragOverStatus.dragNode ||
-        !this.root.dragOverStatus.dragNode.nodeData._hash
-      ) {
+      if (!this.hasDragNode()) {
         return;
       }
       this.root.dragOverStatus.overNodeKey = "";
-      this.root.dragOverStatus.dropPosition = null;
       //拖拽节点与目标节点是同一个，return掉
       if (
         this.nodeData._hash === this.root.dragOverStatus.dragNode.nodeData._hash
       ) {
         return;
       }
-
+      that.root.dragOverStatus.overNodeKey = that.nodeData._hash; //当前经过的可放置的节点的key
       //当前节点禁止做为放置节点时
       if (this.nodeData.noDrop) {
         return;
       }
-      that.root.dragOverStatus.overNodeKey = that.nodeData._hash; //当前经过的可放置的节点的key
       //设置dragEnter定时器，停留300毫秒后触发事件
       if (!this.root.delayedDragEnterLogic) {
         this.root.delayedDragEnterLogic = {};
       }
-      Object.keys(this.root.delayedDragEnterLogic).forEach(function(key) {
+      Object.keys(this.root.delayedDragEnterLogic).forEach(function (key) {
         clearTimeout(that.root.delayedDragEnterLogic[key]);
       });
       this.root.delayedDragEnterLogic[
         this.nodeData._hash
-      ] = setTimeout(function() {
-        console.timeEnd("small loop");
-
+      ] = setTimeout(function () {
         if (!that.nodeData.isExpand) {
           that.toggleCollapseStatus();
         }
-      }, 500);
-      that.root.$emit("dragEnter", {
-        treeNode: that.nodeData,
-        parentNode: that.parentNodeData,
-        event: e
-      });
-      console.time("small loop");
+        that.root.$emit("dragEnter", {
+          treeNode: that.nodeData,
+          parentNode: that.parentNodeData,
+          event: e
+        });
+      }, 250);
     }, 150),
 
     onDragOver(e) {
       e.preventDefault();
       e.stopPropagation();
       //当没有设置拖拽节点时，禁止作为目标节点
-      if (
-        !this.root.dragOverStatus.dragNode ||
-        !this.root.dragOverStatus.dragNode.nodeData._hash
-      ) {
+      if (!this.hasDragNode()) {
         return;
       }
       if (
@@ -253,10 +258,7 @@ export default {
       e.stopPropagation();
       this.dragOverClass = "";
       //当没有设置拖拽节点时，禁止作为目标节点
-      if (
-        !this.root.dragOverStatus.dragNode ||
-        !this.root.dragOverStatus.dragNode.nodeData._hash
-      ) {
+      if (!this.hasDragNode()) {
         return;
       }
       //当前节点禁止拖拽时
@@ -275,10 +277,7 @@ export default {
       e.stopPropagation();
       this.dragOverClass = "";
       //当没有设置拖拽节点时，禁止作为目标节点
-      if (
-        !this.root.dragOverStatus.dragNode ||
-        !this.root.dragOverStatus.dragNode.nodeData._hash
-      ) {
+      if (!this.hasDragNode()) {
         return;
       }
       this.root.dragOverStatus.overNodeKey = "";
@@ -312,10 +311,7 @@ export default {
       e.stopPropagation();
       e.preventDefault();
       //当没有设置拖拽节点时，禁止作为目标节点
-      if (
-        !this.root.dragOverStatus.dragNode ||
-        !this.root.dragOverStatus.dragNode.nodeData._hash
-      ) {
+      if (!this.hasDragNode()) {
         return;
       }
       //当前节点禁止拖拽时

@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "基于html5 drag api实现的vue树形拖拽组件",
   "main": "index.js",
-   "scripts": {
+  "scripts": {
     "dev": "webpack-dev-server --open --hot --port 8099 --config build/webpack.dev.config.js"
   },
   "author": "huijuan.zhou",
   "license": "ISC",
-   "dependencies": {
+  "dependencies": {
     "async-validator": "^1.6.7",
     "axios": "^0.16.2",
     "core-js": "^2.4.1"

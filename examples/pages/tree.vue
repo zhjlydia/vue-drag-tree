@@ -55,11 +55,13 @@ export default {
                 },
                 {
                   title: "leaf 1-2-6",
-                  children:[]
+                  children:[],
+                  noDrop:true
                 },
                 {
                   title: "leaf 1-2-7",
-                  children:[]
+                  children:[],
+                  noDrag:true
                 }
               ]
             }
