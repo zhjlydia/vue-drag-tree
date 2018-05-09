@@ -173,9 +173,6 @@ export default {
         parentNode: this.parentNodeData
       };
       this.dragNodeHighlight = true;
-      try {
-        e.dataTransfer.setData("text/plain", "");
-      } catch (error) { }
       this.root.$emit("dragStart", {
         treeNode: this.nodeData,
         parentNode: this.parentNodeData,
@@ -207,7 +204,7 @@ export default {
       if (this.nodeData.noDrop) {
         return;
       }
-      //设置dragEnter定时器，停留300毫秒后触发事件
+      //设置dragEnter定时器，停留250毫秒后触发事件
       if (!this.root.delayedDragEnterLogic) {
         this.root.delayedDragEnterLogic = {};
       }
