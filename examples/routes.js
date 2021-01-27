@@ -4,6 +4,7 @@ import tree from './pages/tree.vue'
 export default [{
     path: '/',
     component: index,
+    redirect:'/tree',
     children: [ {
         path: '/tree',
         component: tree
